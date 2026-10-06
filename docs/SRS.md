@@ -1,5 +1,7 @@
 # Software Requirements Specification - Zen MCP Browser Automation
 
+[English](SRS.md) | [简体中文](SRS_zh.md)
+
 ## Runtime requirements
 
 - Node.js 18 or newer for extension build and tests.

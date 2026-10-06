@@ -1,6 +1,8 @@
 # Vision - Zen MCP Browser Automation
 
-## 项目目标
+[English](Vision.md) | [简体中文](Vision_zh.md)
+
+## Project goal
 
 zen-mcp provides local MCP access to Zen Browser automation. An MCP client
 connects to a local Go bridge, the bridge forwards JSON-RPC to a Firefox-

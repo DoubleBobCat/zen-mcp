@@ -1,5 +1,7 @@
 # Event Specification
 
+[English](Event-Spec.md) | [简体中文](Event-Spec_zh.md)
+
 ## Public events
 
 The current runtime does not expose a public MCP event stream or subscription

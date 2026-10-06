@@ -1,5 +1,7 @@
 # zen-mcp-bridge Static Releases
 
+[English](README-zen-mcp-bridge.md) | [简体中文](README-zen-mcp-bridge_zh.md)
+
 The bridge is compiled with `CGO_ENABLED=0` for Linux, macOS, and Windows.
 The Linux package also includes the systemd user-service installer.
 

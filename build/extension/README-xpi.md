@@ -1,37 +1,39 @@
-# zen-mcp XPI 安装说明
+# zen-mcp XPI Installation
 
-`zen-mcp-<version>.xpi` 是 Zen Browser 扩展包。
+[English](README-xpi.md) | [简体中文](README-xpi_zh.md)
 
-## Zen Browser 安装
+`zen-mcp-<version>.xpi` is the Zen Browser extension package.
 
-1. 打开 Zen Browser 的扩展管理页面：`about:addons`。
-2. 使用齿轮菜单选择“从文件安装附加组件”，选择本目录中的 `.xpi` 文件。
-3. 如果 Zen Browser 拒绝加载本地或未签名 XPI，打开 `about:config`，将以下配置设为 `true`：
+## Install in Zen Browser
+
+1. Open the Zen Browser extension manager at `about:addons`.
+2. Use the gear menu to select “Install Add-on From File” and choose the `.xpi` file in this directory.
+3. If Zen Browser rejects a local or unsigned XPI, open `about:config` and set the following preference to `true`:
 
    ```text
    extensions.experiments.enabled = true
    ```
 
-4. 对于开发版、未签名或临时 XPI，如果仍被签名校验阻止，可能还需要将以下配置设为 `false`：
+4. For development, unsigned, or temporary XPIs, signature validation may also require the following preference to be `false`:
 
    ```text
    xpinstall.signatures.required = false
    ```
 
-   该设置只适用于允许未签名扩展的开发环境。修改后重启 Zen Browser，再重复安装步骤。
+   Use this only in a local development environment that permits unsigned extensions. Restart Zen Browser after changing it, then repeat the installation steps.
 
-5. 打开扩展设置，确认 bridge URL 为：
+5. Open the extension settings and confirm that the bridge URL is:
 
    ```text
    ws://localhost:9222?type=extension
    ```
 
-## 连接 bridge
+## Connect to the bridge
 
-启动 bridge 后打开 `http://localhost:9222/`。如果扩展无法连接，请检查：
+Start the bridge, then open `http://localhost:9222/`. If the extension cannot connect, check:
 
-- bridge service 正在运行：`systemctl --user status zen-mcp-bridge.service`
-- bridge URL 使用 `ws://localhost:9222?type=extension`
-- `extensions.experiments.enabled` 已开启
+- The bridge service is running: `systemctl --user status zen-mcp-bridge.service`.
+- The bridge URL is `ws://localhost:9222?type=extension`.
+- `extensions.experiments.enabled` is enabled.
 
-安全提示：`xpinstall.signatures.required=false` 会降低扩展签名校验强度，只应在本地开发或测试配置中使用。
+`xpinstall.signatures.required=false` weakens extension signature validation and should only be used for local development or testing.

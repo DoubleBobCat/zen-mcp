@@ -1,5 +1,7 @@
 # MCP Request Workflow Specification
 
+[English](Workflow-Spec.md) | [简体中文](Workflow-Spec_zh.md)
+
 ## Request lifecycle
 
 1. An external MCP client connects through WebSocket or sends one JSON-RPC

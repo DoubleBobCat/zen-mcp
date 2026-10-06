@@ -1,5 +1,7 @@
 # Database Design - Zen MCP Browser Automation
 
+[English](Database-Design.md) | [简体中文](Database-Design_zh.md)
+
 ## Applicability
 
 zen-mcp has no project-owned database and no persistent storage layer. Zen

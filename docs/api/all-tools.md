@@ -1,5 +1,7 @@
 # Zen MCP API Reference
 
+[English](all-tools.md) | [简体中文](all-tools_zh.md)
+
 Callable tools for Zen Browser automation.
 
 ## Status

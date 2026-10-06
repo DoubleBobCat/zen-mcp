@@ -1,5 +1,7 @@
 # Scripts
 
+[English](README.md) | [简体中文](README_zh.md)
+
 - `build-release.sh`: builds static Linux, macOS, and Windows bridge packages and the Linux service release.
 - `ci-test.sh`: runs the repository test unit.
 - `ci-build.sh`: runs the repository cross-platform compile/package unit.

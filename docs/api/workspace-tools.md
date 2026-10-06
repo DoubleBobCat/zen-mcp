@@ -1,5 +1,7 @@
 # Workspace Tools API Reference
 
+[English](workspace-tools.md) | [简体中文](workspace-tools_zh.md)
+
 These workspace APIs are implemented through the privileged `browser.zenMcp` Experiment API. They are callable through the extension bridge and are included in the 43 core tools.
 
 ## zen_list_workspaces

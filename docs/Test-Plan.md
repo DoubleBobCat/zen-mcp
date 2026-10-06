@@ -1,5 +1,7 @@
 # Test Plan - Zen MCP Browser Automation
 
+[English](Test-Plan.md) | [简体中文](Test-Plan_zh.md)
+
 ## Automated checks
 
 Run from the repository root:

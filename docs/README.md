@@ -1,20 +1,22 @@
 # Documentation
 
-`AGENTS.md` 只保留仓库级强约束和职责文档索引。本目录只保存当前实现对应的文档和 documentation-first-engineering 要求的阶段文档；不保留历史归档、过程计划或验证缓存。职责发生变化时，先更新权威文档，再同步本索引和 `AGENTS.md` 的链接。
+[English](README.md) | [简体中文](README_zh.md)
+
+`AGENTS.md` contains only repository-wide constraints and the responsibility index. This directory contains current implementation documentation and the documentation-first-engineering stage documents; historical archives, working plans, and validation caches are not retained. When a responsibility changes, update the authoritative document first, then synchronize this index and the links in `AGENTS.md`.
 
 ## Current Documentation
 
 | 职责 | 权威文档 |
 | --- | --- |
-| MCP 工具清单、参数、返回值和状态 | [`docs/api/all-tools.md`](api/all-tools.md) |
-| 工作区工具细节 | [`docs/api/workspace-tools.md`](api/workspace-tools.md) |
-| API 合约 | [`docs/api/openapi.yaml`](api/openapi.yaml) |
-| 运行时架构和组件边界 | [`docs/architecture/overview.md`](architecture/overview.md) |
-| 开发、构建、调试和验证 | [`docs/development/workflow.md`](development/workflow.md) |
-| 部署、打包、权限和回滚 | [`docs/Deployment.md`](Deployment.md) |
-| 运行、故障排查、日志和服务管理 | [`docs/Operation.md`](Operation.md) |
-| 项目概览和快速开始 | [`README.md`](../README.md) |
-| CI/CD、跨平台构建和发布 | [`docs/development/workflow.md`](development/workflow.md)、[`docs/Deployment.md`](Deployment.md) |
+| MCP tool inventory, parameters, results, and status | [`docs/api/all-tools.md`](api/all-tools.md) |
+| Workspace tool details | [`docs/api/workspace-tools.md`](api/workspace-tools.md) |
+| API contract | [`docs/api/openapi.yaml`](api/openapi.yaml) |
+| Runtime architecture and component boundaries | [`docs/architecture/overview.md`](architecture/overview.md) |
+| Development, build, debugging, and verification | [`docs/development/workflow.md`](development/workflow.md) |
+| Deployment, packaging, permissions, and rollback | [`docs/Deployment.md`](Deployment.md) |
+| Operation, troubleshooting, logs, and service management | [`docs/Operation.md`](Operation.md) |
+| Project overview and quick start | [`README.md`](../README.md) |
+| CI/CD, cross-platform builds, and releases | [`docs/development/workflow.md`](development/workflow.md), [`docs/Deployment.md`](Deployment.md) |
 
 ## Required Documentation Stages
 

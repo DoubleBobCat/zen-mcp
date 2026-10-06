@@ -1,5 +1,7 @@
 # Applicability Decisions
 
+[English](applicability.md) | [简体中文](applicability_zh.md)
+
 All documentation-first-engineering stages have a current document in this
 repository. No stage is satisfied by a historical cache or an unreviewed
 placeholder decision.

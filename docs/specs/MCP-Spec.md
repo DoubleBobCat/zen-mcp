@@ -1,5 +1,7 @@
 # MCP Specification - Zen MCP Browser Automation
 
+[English](MCP-Spec.md) | [简体中文](MCP-Spec_zh.md)
+
 ## Transport
 
 - WebSocket MCP clients connect to `ws://localhost:9222` or `/ws`.

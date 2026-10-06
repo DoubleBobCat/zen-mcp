@@ -1,5 +1,7 @@
 # Product Requirements Document - Zen MCP Browser Automation
 
+[English](PRD.md) | [简体中文](PRD_zh.md)
+
 ## Users
 
 - MCP clients that need to inspect or control a local Zen Browser.

@@ -1,5 +1,7 @@
 # Browser Extension Specification
 
+[English](Plugin-Spec.md) | [简体中文](Plugin-Spec_zh.md)
+
 ## Scope
 
 The Firefox-compatible Zen Browser extension is the runtime authority for MCP

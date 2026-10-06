@@ -12,7 +12,7 @@ zen-mcp exposes Zen Browser automation through a local bridge and a Zen Browser 
 - Navigation, inspection, interaction, network capture, and workspace management.
 - Debug console at `http://localhost:9222/`.
 
-See [docs/api/all-tools.md](docs/api/all-tools.md) for the tool reference.
+See [the complete tool API reference](docs/api/all-tools.md) for the tool reference.
 
 ## Architecture
 
@@ -37,7 +37,7 @@ npm --prefix build/extension run typecheck
 npm --prefix build/extension run build:all
 ```
 
-`npm --prefix build/extension run build:all` creates one platform-independent XPI and static Go bridge packages for Linux, macOS, and Windows. See [build/go-bridge/README-zen-mcp-bridge.md](build/go-bridge/README-zen-mcp-bridge.md) and [build/extension/README-xpi.md](build/extension/README-xpi.md).
+`npm --prefix build/extension run build:all` creates one platform-independent XPI and static Go bridge packages for Linux, macOS, and Windows. See the [Go bridge release guide](build/go-bridge/README-zen-mcp-bridge.md) and [XPI installation guide](build/extension/README-xpi.md).
 
 ## Development Commands
 
@@ -76,12 +76,12 @@ zen-mcp/
 
 ## Documentation
 
-- [文档地图](docs/README.md)
-- [全部工具 API](docs/api/all-tools.md)
-- [工作区工具 API](docs/api/workspace-tools.md)
-- [架构概览](docs/architecture/overview.md)
-- [开发流程](docs/development/workflow.md)
-- [部署与运维](docs/Deployment.md)
+- [Documentation map](docs/README.md)
+- [Complete tool API](docs/api/all-tools.md)
+- [Workspace tools API](docs/api/workspace-tools.md)
+- [Architecture overview](docs/architecture/overview.md)
+- [Development workflow](docs/development/workflow.md)
+- [Deployment](docs/Deployment.md)
 
 ## Build Output
 

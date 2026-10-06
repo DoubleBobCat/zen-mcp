@@ -1,6 +1,8 @@
 # Architecture Design - Zen MCP Browser Automation
 
-## 系统分层
+[English](Architecture.md) | [简体中文](Architecture_zh.md)
+
+## System layers
 
 ```text
 MCP Client

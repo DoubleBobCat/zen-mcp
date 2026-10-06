@@ -1,5 +1,7 @@
 # Source Code
 
+[English](README.md) | [简体中文](README_zh.md)
+
 Runtime components:
 
 - `go-bridge/`: Go WebSocket and Streamable HTTP bridge.

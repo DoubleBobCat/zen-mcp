@@ -1,5 +1,7 @@
 # Operation - Zen MCP Browser Automation
 
+[English](Operation.md) | [简体中文](Operation_zh.md)
+
 ## Start and inspect
 
 Foreground bridge:

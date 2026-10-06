@@ -12,7 +12,7 @@ zen-mcp 通过本地 bridge 和 Zen Browser 扩展暴露浏览器自动化能力
 - 支持导航、检查、交互、网络捕获和工作区管理。
 - 调试页面：`http://localhost:9222/`。
 
-工具说明见[全部工具 API](docs/api/all-tools.md)。
+工具说明见[全部工具 API](docs/api/all-tools_zh.md)。
 
 ## 架构
 
@@ -37,7 +37,7 @@ npm --prefix build/extension run typecheck
 npm --prefix build/extension run build:all
 ```
 
-`npm --prefix build/extension run build:all` 会生成跨平台通用的 XPI，以及 Linux、macOS、Windows 三个平台的静态 Go bridge 发布包。详见 [build/go-bridge/README-zen-mcp-bridge.md](build/go-bridge/README-zen-mcp-bridge.md) 与 [build/extension/README-xpi.md](build/extension/README-xpi.md)。
+`npm --prefix build/extension run build:all` 会生成跨平台通用的 XPI，以及 Linux、macOS、Windows 三个平台的静态 Go bridge 发布包。详见 [Go bridge 发布说明](build/go-bridge/README-zen-mcp-bridge_zh.md) 与 [XPI 安装说明](build/extension/README-xpi_zh.md)。
 
 ## 开发命令
 
@@ -76,12 +76,12 @@ zen-mcp/
 
 ## 文档
 
-- [文档地图](docs/README.md)
-- [全部工具 API](docs/api/all-tools.md)
-- [工作区工具 API](docs/api/workspace-tools.md)
-- [架构概览](docs/architecture/overview.md)
-- [开发流程](docs/development/workflow.md)
-- [部署与运维](docs/Deployment.md)
+- [文档地图](docs/README_zh.md)
+- [全部工具 API](docs/api/all-tools_zh.md)
+- [工作区工具 API](docs/api/workspace-tools_zh.md)
+- [架构概览](docs/architecture/overview_zh.md)
+- [开发流程](docs/development/workflow_zh.md)
+- [部署说明](docs/Deployment_zh.md)
 
 ## 构建输出
 

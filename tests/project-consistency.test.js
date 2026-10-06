@@ -97,6 +97,44 @@ test("repository metadata declares GPLv3 and bilingual readmes", () => {
   assert.match(read("README_zh.md"), /46 个可调用 MCP 工具/);
 });
 
+test("root readmes link to language-matched markdown documents", () => {
+  const englishLinks = [...read("README.md").split("\n").slice(3).join("\n").matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g)].map(
+    (match) => match[1]
+  );
+  const chineseLinks = [...read("README_zh.md").split("\n").slice(3).join("\n").matchAll(/\[[^\]]+\]\(([^)#]+\.md)\)/g)].map(
+    (match) => match[1]
+  );
+
+  for (const relativePath of englishLinks) {
+    assert.ok(existsSync(relativePath), `Missing English README target ${relativePath}`);
+    assert.ok(
+      existsSync(relativePath.replace(/\.md$/, "_zh.md")),
+      `Missing Chinese counterpart for ${relativePath}`
+    );
+  }
+
+  for (const relativePath of chineseLinks) {
+    assert.ok(existsSync(relativePath), `Missing Chinese README target ${relativePath}`);
+    assert.match(relativePath, /_zh\.md$/);
+  }
+});
+
+test("documentation markdown files have language counterparts", () => {
+  const markdownFiles = [];
+  const visit = (directory) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = `${directory}/${entry.name}`;
+      if (entry.isDirectory()) visit(path);
+      else if (entry.name.endsWith(".md") && !entry.name.endsWith("_zh.md")) markdownFiles.push(path);
+    }
+  };
+  visit("docs");
+
+  for (const path of markdownFiles) {
+    assert.ok(existsSync(path.replace(/\.md$/, "_zh.md")), `Missing Chinese counterpart for ${path}`);
+  }
+});
+
 test("GitHub and Gitea workflows expose ordered CI and tag CD", () => {
   for (const workflowPath of [".github/workflows/ci.yml", ".gitea/workflows/ci.yml"]) {
     const workflow = read(workflowPath);
