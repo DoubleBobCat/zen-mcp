@@ -1,0 +1,3 @@
+source-dir: dist/extension
+artifacts-dir: .
+filename: "zen-mcp-{version}.xpi"

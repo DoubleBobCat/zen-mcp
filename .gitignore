@@ -1,0 +1,12 @@
+# Build-only dependencies, intermediates, and generated packages.
+build/extension/node_modules/
+src/extension/node_modules
+build/extension/dist/
+build/extension/*.xpi
+build/extension/*.zip
+build/go-bridge/dist/
+build/go-bridge/work/
+build/go-bridge/release/
+build/go-bridge/*.zip
+build/artifacts/
+.worktrees/

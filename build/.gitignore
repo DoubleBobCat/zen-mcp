@@ -1,0 +1,8 @@
+extension/node_modules/
+extension/dist/
+extension/*.xpi
+extension/*.zip
+go-bridge/dist/
+go-bridge/work/
+go-bridge/release/
+go-bridge/*.zip

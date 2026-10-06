@@ -1,0 +1,13 @@
+[Unit]
+Description=zen-mcp Go bridge
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart="@ZEN_MCP_BRIDGE_BINARY@" --config "@ZEN_MCP_BRIDGE_CONFIG@"
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

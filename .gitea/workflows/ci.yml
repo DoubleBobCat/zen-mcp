@@ -1,0 +1,77 @@
+name: CI and CD
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*", "[0-9]*"]
+  pull_request:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - run: npm --prefix build/extension ci
+      - run: npm --prefix build/extension run ci:test
+
+  build:
+    name: Build packages
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - run: npm --prefix build/extension ci
+      - run: npm --prefix build/extension run ci:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zen-mcp-release
+          path: build/artifacts/*
+          if-no-files-found: error
+
+  release:
+    name: Publish Gitea release
+    needs: build
+    if: startsWith(gitea.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: zen-mcp-release
+          path: release-assets
+      - name: Validate release assets
+        run: |
+          test "$(find release-assets -maxdepth 1 -type f | wc -l)" -ge 4
+      - name: Create release and upload assets
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          GITEA_SERVER_URL: ${{ gitea.server_url }}
+          GITEA_REPOSITORY: ${{ gitea.repository }}
+          TAG_NAME: ${{ gitea.ref_name }}
+        run: |
+          set -eu
+          test -n "$GITEA_TOKEN"
+          api="$GITEA_SERVER_URL/api/v1/repos/$GITEA_REPOSITORY"
+          release_id=$(curl --fail-with-body -sS -X POST "$api/releases" \
+            -H "Authorization: token $GITEA_TOKEN" \
+            -H 'Content-Type: application/json' \
+            -d "{\"tag_name\":\"$TAG_NAME\",\"name\":\"$TAG_NAME\"}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["id"])')
+          for asset in release-assets/*; do
+            curl --fail-with-body -sS -X POST "$api/releases/$release_id/assets?name=$(basename "$asset")" \
+              -H "Authorization: token $GITEA_TOKEN" \
+              -H 'Content-Type: application/octet-stream' \
+              --data-binary "@$asset"
+          done

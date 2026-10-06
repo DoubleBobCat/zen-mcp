@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>zen-mcp bridge settings</title>
+    <style>
+      body {
+        box-sizing: border-box;
+        min-width: 280px;
+        margin: 0;
+        padding: 12px;
+        font: 13px system-ui, sans-serif;
+        color: #1f2933;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      span {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 6px;
+      }
+
+      .checkbox {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .checkbox span {
+        margin: 0;
+      }
+
+      #status {
+        margin: 10px 0;
+      }
+
+      button {
+        width: 100%;
+        padding: 7px;
+      }
+    </style>
+  </head>
+  <body>
+    <label>
+      <span>Bridge WebSocket URL</span>
+      <input id="url" type="text" autocomplete="off">
+    </label>
+    <label>
+      <span>Reconnect interval (ms)</span>
+      <input id="reconnectInterval" type="number" min="100" step="100">
+    </label>
+    <label class="checkbox">
+      <input id="autoConnect" type="checkbox">
+      <span>Auto connect</span>
+    </label>
+    <label class="checkbox">
+      <input id="filterNetworkCookies" type="checkbox" checked>
+      <span>Filter cookies and credentials from network results</span>
+    </label>
+    <div id="status" role="status">Status: unknown</div>
+    <button id="save" type="button">Save</button>
+    <script src="settings.js"></script>
+  </body>
+</html>

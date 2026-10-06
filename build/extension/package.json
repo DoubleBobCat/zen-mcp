@@ -1,0 +1,37 @@
+{
+  "name": "zen-mcp",
+  "version": "0.1.2",
+  "description": "MCP server for Zen Browser automation",
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ln -sfn ../../build/extension/node_modules ../../src/extension/node_modules && trap 'rm -f ../../src/extension/node_modules' EXIT && tsc",
+    "typecheck": "ln -sfn ../../build/extension/node_modules ../../src/extension/node_modules && trap 'rm -f ../../src/extension/node_modules' EXIT && tsc --noEmit",
+    "test": "cd ../.. && node --experimental-default-type=module --test tests/*.test.js",
+    "build:extension": "ln -sfn ../../build/extension/node_modules ../../src/extension/node_modules && trap 'rm -f ../../src/extension/node_modules' EXIT && tsc && rm -rf dist/extension && mkdir -p dist/extension && cp ../../src/extension/manifest.json ../../src/extension/background.js ../../src/extension/bridge-connection.js ../../src/extension/content-script.js ../../src/extension/network-capture.js dist/extension/ && cp -r ../../src/extension/experiment dist/extension/ && cp -r ../../src/extension/settings dist/extension/ && npx esbuild ../../src/extension/lib/index.ts --bundle --format=iife --global-name=ZenMCP --outfile=dist/extension/index.js",
+    "package": "rm -f zen-mcp-*.xpi zen-mcp-*.zip && web-ext build --source-dir=dist/extension --artifacts-dir=. --overwrite-dest && mv zen-mcp-$(node -p \"require('./package.json').version\").zip zen-mcp-$(node -p \"require('./package.json').version\").xpi && mkdir -p ../../build/artifacts && cp zen-mcp-$(node -p \"require('./package.json').version\").xpi ../../build/artifacts/",
+    "build:all": "npm run bridge:build:all && npm run build:extension && npm run package",
+    "bridge:build:all": "npm run debug:build && bash ../../scripts/build-release.sh",
+    "ci:test": "bash ../../scripts/ci-test.sh",
+    "ci:build": "bash ../../scripts/ci-build.sh",
+    "ci:release": "bash ../../scripts/ci-release.sh",
+    "server": "npm run bridge",
+    "server:install": "npm run build:all && bash ../../build/go-bridge/release/install.sh",
+    "bridge:test": "cd ../../src/go-bridge && go test ./...",
+    "debug:build": "rm -rf ../../build/go-bridge/work && mkdir -p ../../build/go-bridge/work && cp -r ../../src/go-bridge/. ../../build/go-bridge/work/ && cp ../../src/debug-frontend/index.html ../../src/debug-frontend/debug.js ../../src/debug-frontend/mcp-client.js ../../src/debug-frontend/bridge.js ../../build/go-bridge/work/static/",
+    "bridge:build": "npm run debug:build && mkdir -p ../../build/go-bridge/dist && cd ../../build/go-bridge/work && go build -o ../dist/zen-mcp-bridge .",
+    "bridge": "cd ../../src/go-bridge && go run ."
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "ws": "^8.21.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "esbuild": "^0.28.1",
+    "typescript": "^5.5.0",
+    "web-ext": "^8.0.0"
+  }
+}

@@ -1,0 +1,157 @@
+[
+  {
+    "namespace": "zenMcp",
+    "description": "Privileged Zen Browser APIs for zen-mcp.",
+    "functions": [
+      {
+        "name": "listWorkspaces",
+        "type": "function",
+        "async": true,
+        "parameters": []
+      },
+      {
+        "name": "diagnoseParent",
+        "type": "function",
+        "async": true,
+        "parameters": []
+      },
+      {
+        "name": "diagnosePing",
+        "type": "function",
+        "async": true,
+        "parameters": []
+      },
+      {
+        "name": "roundTripTempBase64",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "value", "type": "string" }
+        ]
+      },
+      {
+        "name": "listWorkspaceTabs",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "validateTabWorkspace",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "tabId", "type": "integer" },
+          { "name": "workspaceId", "type": "string" }
+        ]
+      },
+      {
+        "name": "moveTabInWorkspace",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "tabIndex", "type": "integer", "minimum": 0 },
+          { "name": "newIndex", "type": "integer", "minimum": 0 },
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "moveTabToWorkspace",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "tabIndex", "type": "integer", "minimum": 0 },
+          { "name": "targetWorkspaceId", "type": "string" },
+          { "name": "sourceWorkspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "manageWorkspace",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "action",
+            "type": "string",
+            "enum": ["create", "delete", "rename"]
+          },
+          { "name": "workspaceId", "type": "string", "optional": true },
+          { "name": "name", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "listFolders",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "manageFolder",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "action",
+            "type": "string",
+            "enum": ["create", "rename", "delete", "unpack"]
+          },
+          { "name": "workspaceId", "type": "string", "optional": true },
+          { "name": "folderId", "type": "string", "optional": true },
+          { "name": "title", "type": "string", "optional": true },
+          {
+            "name": "tabIndices",
+            "type": "array",
+            "items": { "type": "integer", "minimum": 0 },
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "moveTabToFolder",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "tabIndex", "type": "integer", "minimum": 0 },
+          { "name": "folderId", "type": "string" },
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "moveTabOutOfFolder",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "folderId", "type": "string" },
+          { "name": "tabIndex", "type": "integer", "minimum": 0 },
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "listTopPinnedTabs",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      },
+      {
+        "name": "manageTopPinnedTab",
+        "type": "function",
+        "async": true,
+        "parameters": [
+          {
+            "name": "action",
+            "type": "string",
+            "enum": ["pin", "unpin", "move"]
+          },
+          { "name": "tabIndex", "type": "integer", "minimum": 0 },
+          { "name": "newIndex", "type": "integer", "minimum": 0, "optional": true },
+          { "name": "workspaceId", "type": "string", "optional": true }
+        ]
+      }
+    ]
+  }
+]

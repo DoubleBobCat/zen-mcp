@@ -1,0 +1,6 @@
+{
+  "port": "9222",
+  "httpTimeout": "30s",
+  "sessionIdleTimeout": "10m",
+  "switchLockTimeout": "30s"
+}

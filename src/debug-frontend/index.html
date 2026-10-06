@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>zen-mcp Debug Console</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --surface: #24283b;
+    --surface2: #2f3348;
+    --border: #3b4261;
+    --text: #c0caf5;
+    --text2: #a9b1d6;
+    --accent: #7aa2f7;
+    --green: #9ece6a;
+    --red: #f7768e;
+    --orange: #ff9e64;
+    --purple: #bb9af7;
+    --cyan: #7dcfff;
+    --radius: 8px;
+    --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .subtitle {
+    color: var(--text2);
+    font-size: 0.85rem;
+    margin-bottom: 24px;
+  }
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    font-size: 0.85rem;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+  .status-dot.error { background: var(--red); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .tool-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--surface2);
+    cursor: pointer;
+    user-select: none;
+  }
+  .tool-header:hover { background: var(--border); }
+  .tool-name {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+  .tool-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+  .badge-read { background: rgba(122,162,247,0.15); color: var(--accent); }
+  .badge-write { background: rgba(255,158,100,0.15); color: var(--orange); }
+  .badge-move { background: rgba(187,154,247,0.15); color: var(--purple); }
+  .badge-diagnose { background: rgba(187,154,247,0.18); color: var(--purple); }
+  .badge-utility { background: rgba(255,205,86,0.14); color: #ffd166; }
+
+  .tool-body {
+    padding: 18px;
+    display: none;
+  }
+  .tool-body.open { display: block; }
+
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .field label .optional {
+    color: var(--text2);
+    opacity: 0.5;
+    font-weight: 400;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field textarea {
+    min-height: 96px;
+    resize: vertical;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent);
+  }
+  .field select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a9b1d6' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .checkbox-field input { width: auto; }
+
+  .top-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 18px 0 20px;
+    flex-wrap: wrap;
+  }
+  .filter-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .filter-chip {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .filter-chip.active,
+  .filter-chip:focus-visible {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    outline: none;
+  }
+  .filter-count {
+    color: var(--text2);
+    opacity: 0.7;
+    margin-left: 4px;
+  }
+  .language-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text2);
+    font-size: 0.8rem;
+  }
+  .language-shell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .language-control select {
+    min-width: 112px;
+    padding: 6px 28px 6px 10px;
+    background-color: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.78rem;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237dcfff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  .language-control select:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 2px rgba(125,207,255,0.12);
+  }
+  .tool-description {
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-bottom: 14px;
+  }
+
+  .btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .tool-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .btn-export {
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+  }
+  .btn-export:hover { background: rgba(125,207,255,0.12); }
+
+  .result-area {
+    margin-top: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: none;
+  }
+  .result-area.visible { display: block; }
+  .result-header {
+    padding: 8px 14px;
+    background: var(--surface2);
+    font-size: 0.75rem;
+    color: var(--text2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .result-header .status-ok { color: var(--green); }
+  .result-header .status-err { color: var(--red); }
+  .result-body {
+    padding: 14px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 400px;
+    overflow-y: auto;
+    color: var(--text2);
+  }
+  .result-body::-webkit-scrollbar { width: 6px; }
+  .result-body::-webkit-scrollbar-track { background: transparent; }
+  .result-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .tabs-preview {
+    margin-top: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .tabs-preview-header {
+    padding: 8px 14px;
+    background: var(--surface2);
+    font-size: 0.75rem;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+  .tab-item:last-child { border-bottom: none; }
+  .tab-item.active { background: rgba(122,162,247,0.08); }
+  .tab-idx {
+    font-family: var(--mono);
+    color: var(--text2);
+    opacity: 0.5;
+    min-width: 20px;
+  }
+  .tab-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tab-url {
+    color: var(--text2);
+    opacity: 0.6;
+    font-size: 0.75rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tab-badge {
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(122,162,247,0.15);
+    color: var(--accent);
+  }
+  .tab-badge.pin { background: rgba(255,158,100,0.15); color: var(--orange); }
+
+  .ws-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .ws-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ws-chip:hover { border-color: var(--accent); }
+  .ws-chip.active {
+    border-color: var(--accent);
+    background: rgba(122,162,247,0.1);
+  }
+  .ws-chip .icon { font-size: 1rem; }
+  .ws-chip .uuid {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text2);
+    opacity: 0.5;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+  .section-title {
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .log-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-top: 24px;
+  }
+  .log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+  .log-body {
+    padding: 14px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+  .log-entry {
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(59,66,97,0.3);
+    display: flex;
+    gap: 10px;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-time { color: var(--text2); opacity: 0.4; }
+  .log-tool { color: var(--cyan); }
+  .log-ok { color: var(--green); }
+  .log-err { color: var(--red); }
+  .log-msg { color: var(--text2); }
+  @media (max-width: 720px) {
+    body { padding: 16px; }
+    .top-toolbar { align-items: stretch; }
+    .language-control { width: 100%; justify-content: space-between; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>zen-mcp Debug Console</h1>
+<p class="subtitle" data-i18n="subtitle">MCP Server v0.1.2 - 46 Tools</p>
+
+<div class="status-bar">
+  <span class="status-dot" id="statusDot"></span>
+  <span id="statusText" data-i18n="checkingConnection">Checking connection...</span>
+</div>
+
+<!-- Workspace Overview -->
+<div class="section-title" data-i18n="workspaces">Workspaces</div>
+<div class="ws-chips" id="wsChips">
+  <div style="color:var(--text2);font-size:0.8rem;" data-i18n="loading">Loading...</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Tool Cards -->
+<div class="top-toolbar">
+  <div class="filter-group" id="categoryFilters" aria-label="Tool categories"></div>
+  <div class="language-shell">
+    <label class="language-control">
+      <span data-i18n="languageLabel">Language</span>
+      <select id="languageSelect">
+        <option value="zh-CN">中文</option>
+        <option value="en">English</option>
+      </select>
+    </label>
+  </div>
+</div>
+
+<div class="tools-grid" id="toolsGrid" data-diagnostic-tool="zen_diagnose_experiment"></div>
+
+<!-- Call Log -->
+<div class="log-panel">
+  <div class="log-header">
+    <span data-i18n="callLog">Call Log</span>
+    <button class="btn" id="clearLogBtn" style="padding:4px 10px;font-size:0.7rem;background:var(--surface);color:var(--text2);" data-i18n="clear">Clear</button>
+  </div>
+  <div class="log-body" id="logBody">
+    <div style="color:var(--text2);opacity:0.4;font-size:0.75rem;" data-i18n="noCalls">No calls yet</div>
+  </div>
+</div>
+
+<script src="mcp-client.js"></script>
+<script src="debug.js"></script>
+
+</body>
+</html>

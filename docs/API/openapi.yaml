@@ -1,0 +1,197 @@
+openapi: 3.1.0
+x-zen-mcp-tools:
+  core:
+    -
+      name: zen_list_workspaces
+      description: List all workspaces.
+    -
+      name: zen_list_workspace_tabs
+      description: List tabs in a workspace.
+    -
+      name: zen_move_tab_in_workspace
+      description: Move a tab within a workspace.
+    -
+      name: zen_move_tab_to_workspace
+      description: Move a tab to another workspace.
+    -
+      name: zen_manage_workspace
+      description: Create, delete, or rename a workspace.
+    -
+      name: zen_list_folders
+      description: List Zen folders in a workspace.
+    -
+      name: zen_manage_folder
+      description: Create, rename, delete, or unpack a Zen folder.
+    -
+      name: zen_move_tab_to_folder
+      description: Move a workspace tab into a Zen folder.
+    -
+      name: zen_move_tab_out_of_folder
+      description: Move a folder tab out of its Zen folder.
+    -
+      name: zen_list_top_pinned_tabs
+      description: List top pinned tabs in a workspace.
+    -
+      name: zen_manage_top_pinned_tab
+      description: Pin, unpin, or move a top pinned tab.
+    -
+      name: zen_navigate
+      description: Navigate an explicitly targeted tab to a URL.
+    -
+      name: zen_reload
+      description: Reload an explicitly targeted tab.
+    -
+      name: zen_search
+      description: Search a built-in engine or composed URL and close the temporary result tab.
+    -
+      name: zen_list_pages
+      description: List open browser tabs.
+    -
+      name: zen_select_page
+      description: Select a tab by current-window index.
+    -
+      name: zen_new_tab
+      description: Create a new tab.
+    -
+      name: zen_close_tab
+      description: Close a tab by current-window index.
+    -
+      name: zen_snapshot
+      description: Get a structural page snapshot.
+    -
+      name: zen_screenshot
+      description: Capture the selected target tab.
+    -
+      name: zen_get_page_text
+      description: Get visible page text.
+    -
+      name: zen_get_form_fields
+      description: List page form fields.
+    -
+      name: zen_click
+      description: Click an element by CSS selector.
+    -
+      name: zen_fill
+      description: Fill an input or textarea.
+    -
+      name: zen_select_option
+      description: Select an option from a dropdown.
+    -
+      name: zen_check
+      description: Check or uncheck a checkbox or radio button.
+    -
+      name: zen_press_key
+      description: Press a keyboard key.
+    -
+      name: zen_fill_form
+      description: Fill multiple form fields.
+    -
+      name: zen_scroll
+      description: Scroll a page or element.
+    -
+      name: zen_evaluate
+      description: Execute JavaScript in the page context.
+    -
+      name: zen_wait
+      description: Wait for a number of milliseconds.
+    -
+      name: zen_wait_for
+      description: Wait for an element or text.
+    -
+      name: zen_reconnect
+      description: Return a successful reconnect operation result.
+    -
+      name: zen_acquire_tab_switch_lock
+      description: Acquire or renew the active-tab switch lock.
+    -
+      name: zen_release_tab_switch_lock
+      description: Release the active-tab switch lock.
+    -
+      name: zen_get_tab_switch_lock
+      description: Get the active-tab switch lock state.
+    -
+      name: zen_network_start
+      description: Start a tab-scoped network capture session.
+    -
+      name: zen_network_stop
+      description: Stop a network capture session.
+    -
+      name: zen_network_list
+      description: List captured network requests with filters.
+    -
+      name: zen_network_get_request
+      description: Read a captured network request.
+    -
+      name: zen_network_get_response
+      description: Read a captured network response.
+    -
+      name: zen_network_replay
+      description: Replay a captured request with browser-managed cookies.
+    -
+      name: zen_network_replay_with_response
+      description: Replay a request with a one-shot response override.
+  diagnostics:
+    -
+      name: zen_diagnose_experiment
+      description: Inspect Experiment API registration.
+    -
+      name: zen_diagnose_parent
+      description: Inspect privileged Zen API availability.
+    -
+      name: zen_diagnose_ping
+      description: Verify privileged Experiment calls.
+info:
+  title: Zen MCP Tool Contracts
+  version: 0.1.2
+  description: >
+    Current MCP tool inventory and the Streamable HTTP transport contract for
+    the local Zen Browser bridge.
+paths:
+  /mcp:
+    post:
+      summary: Streamable HTTP MCP adapter
+      operationId: postMcp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonRpcMessage'
+      responses:
+        '200':
+          description: JSON-RPC response.
+        '202':
+          description: JSON-RPC notification accepted.
+        '400':
+          description: Invalid JSON or JSON-RPC request.
+        '405':
+          description: Method not allowed.
+        '406':
+          description: JSON is not accepted by the client.
+        '502':
+          description: Failed to forward the request.
+        '503':
+          description: Extension is not connected.
+        '504':
+          description: Extension response timed out.
+components:
+  schemas:
+    JsonRpcMessage:
+      type: object
+      required:
+        - jsonrpc
+        - method
+      properties:
+        jsonrpc:
+          type: string
+          const: '2.0'
+        id:
+          oneOf:
+            - type: string
+            - type: integer
+            - type: 'null'
+        method:
+          type: string
+        params:
+          type: object
+          additionalProperties: true
